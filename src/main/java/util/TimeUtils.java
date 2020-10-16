@@ -2,8 +2,6 @@ package util;
 
 import org.agrona.concurrent.CachedNanoClock;
 import org.agrona.concurrent.NanoClock;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.*;
 
@@ -21,8 +19,6 @@ public class TimeUtils
     public static final long NANOS_IN_DAY = NANOS_IN_MINUTE * MINUTES_IN_DAY;
     public static final long MILLIS_IN_WEEK = 1000 * SECONDS_IN_DAY * 7;
     public static final LocalDate SHINY_DAY = LocalDate.of(2018, 9, 10);
-    private static final Logger LOGGER = LogManager.getLogger(TimeUtils.class);
-
     private static final CachedNanoClock UPDATEABLE_CLOCK = new CachedNanoClock();
     private static NanoClock clock = setHistoricalTickingClockFromProperty();
 
@@ -93,12 +89,10 @@ public class TimeUtils
         {
             final Instant start = ZonedDateTime.parse(clockStartTime).toInstant();
             setHistoricalTickingClockFromProperty(start);
-            LOGGER.info("Successfully set clock start time to {}", clockStartTime);
         }
         catch (final Exception ignored)
         {
             setDefaultClock();
-            LOGGER.info("Default realtime clock is used");
         }
         return clock;
     }
