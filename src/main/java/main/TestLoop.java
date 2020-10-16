@@ -2,13 +2,14 @@ package main;
 
 import net.openhft.affinity.AffinityLock;
 import net.openhft.affinity.AffinitySupport;
+import util.RealtimeNanoClock;
+import util.TimeUtils;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 public class TestLoop
 {
-    private static final long NANOS_IN_SECOND = 1_000_000_000;
 
     public static void main(final String[] args)
     {
@@ -27,32 +28,26 @@ public class TestLoop
             osThreadId,
             affinityLock.cpuId());
         final Instant start = Instant.now();
-        final long startNanoTime = System.nanoTime();
+        final long startNanoTime = TimeUtils.now();
         System.out.printf("\nStarted at %s", start);
         // Switch time is a time when we switch from one
         Instant switchTime = start.plus(delay, ChronoUnit.SECONDS);
-        final long switchDelayNs = delay * NANOS_IN_SECOND;
-        // Print time is the time when we print results. It differs from switch time to avoid
-        // print-related effects.
-        Instant printTime = switchTime.plus(30, ChronoUnit.SECONDS);
-        final long printDelayNanos = switchDelayNs + 30 * NANOS_IN_SECOND;
         long lastRecordedNanoTime = startNanoTime;
         while (true)
         {
-            final long nanoTime = System.nanoTime();
-            if (nanoTime - startNanoTime < switchDelayNs)
+            if (lastRecordedNanoTime < startNanoTime + RealtimeNanoClock.NANOS_IN_SECOND * delay)
             {
-                lastRecordedNanoTime = nanoTime;
+                lastRecordedNanoTime = TimeUtils.now();
             }
             else
             {
-                if (nanoTime - startNanoTime > printDelayNanos)
+                if (TimeUtils.now() > startNanoTime + RealtimeNanoClock.NANOS_IN_SECOND * (delay + 30))
                 {
                     final Instant lastRecordedInstant =
                             start.plus(lastRecordedNanoTime - startNanoTime, ChronoUnit.NANOS);
                     System.out.printf("\nSwitch time: %s", switchTime);
                     System.out.printf("\nLast recorded time: %s", lastRecordedInstant);
-                    System.out.printf("\nPrint time: %s", printTime);
+                    System.out.printf("\nPrint time: %s", TimeUtils.now());
                     System.exit(0);
                 }
             }
