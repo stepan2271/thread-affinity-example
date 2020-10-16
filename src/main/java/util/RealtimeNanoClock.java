@@ -11,7 +11,6 @@ public class RealtimeNanoClock
 {
     private static final long NANOS_IN_MILLI = 1_000_000L;
     private static final long START_TIME_NS = NANOS_IN_MILLI * System.currentTimeMillis() - System.nanoTime();
-    public static final long NANOS_IN_SECOND = 1_000_000_000;
 
     @Override
     public long nanoTime()
