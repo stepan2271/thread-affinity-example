@@ -13,13 +13,7 @@ import java.time.*;
 public class TimeUtils
 {
     public static final ZoneId MOSCOW_ZONE_ID = ZoneId.of("Europe/Moscow");
-    public static final int MINUTES_IN_HOUR = 60;
-    public static final int MINUTES_IN_DAY = MINUTES_IN_HOUR * 24;
-    public static final long SECONDS_IN_DAY = 60 * MINUTES_IN_DAY;
     public static final long NANOS_IN_SECOND = 1_000_000_000L;
-    public static final long NANOS_IN_MINUTE = NANOS_IN_SECOND * 60;
-    public static final long NANOS_IN_DAY = NANOS_IN_MINUTE * MINUTES_IN_DAY;
-    public static final long MILLIS_IN_WEEK = 1000 * SECONDS_IN_DAY * 7;
     public static final LocalDate SHINY_DAY = LocalDate.of(2018, 9, 10);
     private static final Logger LOGGER = LogManager.getLogger(TimeUtils.class);
 
